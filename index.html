@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Guardianes de los Derechos Humanos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #e0f2ff, #f3f4ff);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .game-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 24px 20px 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin: 0 0 10px;
+      text-align: center;
+      color: #1f2933;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #4b5563;
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      margin-bottom: 8px;
+    }
+
+    .progress {
+      margin: 10px 0 18px;
+    }
+
+    .progress-text {
+      font-size: 0.85rem;
+      color: #4b5563;
+      margin-bottom: 4px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+
+    .progress-bar-inner {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0ea5e9, #22c55e);
+      transition: width 0.3s ease;
+    }
+
+    .question-text {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .module-label {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .type-label {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+
+    .options {
+      margin-bottom: 10px;
+    }
+
+    .option-item {
+      background: #f9fafb;
+      border-radius: 999px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      border: 1px solid transparent;
+      transition: background 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .option-item:hover {
+      background: #eef2ff;
+      border-color: #c7d2fe;
+    }
+
+    .option-item input {
+      margin-right: 8px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      padding: 10px;
+      font-size: 0.95rem;
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 2px rgba(14,165,233,0.2);
+    }
+
+    .feedback {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      min-height: 22px;
+    }
+
+    .feedback.correct {
+      color: #16a34a;
+    }
+
+    .feedback.incorrect {
+      color: #dc2626;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #0ea5e9, #22c55e);
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(34,197,94,0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(34,197,94,0.45);
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .score {
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    .end-screen {
+      text-align: center;
+      padding: 20px 10px 10px;
+    }
+
+    .end-title {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+
+    .end-score {
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      .game-card {
+        padding: 18px 14px 16px;
+      }
+      h1 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="game-card">
+      <h1>Guardianes de los Derechos Humanos</h1>
+      <p class="subtitle">
+        Responde preguntas, reflexiona sobre situaciones reales y conviértete en defensor de los derechos humanos. 🕊️
+      </p>
+
+      <div id="game">
+        <div class="badge" id="moduleBadge">Introducción</div>
+        <div class="module-label" id="moduleLabel"></div>
+        <div class="type-label" id="typeLabel"></div>
+
+        <div class="progress">
+          <div class="progress-text" id="progressText">Pregunta 1 de 1</div>
+          <div class="progress-bar">
+            <div class="progress-bar-inner" id="progressBar"></div>
+          </div>
+        </div>
+
+        <div class="question-text" id="questionText">
+          <!-- Pregunta -->
+        </div>
+
+        <div class="options" id="optionsContainer">
+          <!-- Opciones tipo test -->
+        </div>
+
+        <textarea id="openAnswer" placeholder="Escribe tu respuesta aquí..." style="display:none;"></textarea>
+        <div class="hint" id="reflectionHint"></div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="controls">
+          <div class="score" id="scoreText">Puntaje: 0</div>
+          <button class="btn btn-primary" id="nextBtn">Responder</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Banco de preguntas (puedes agregar más siguiendo el mismo formato)
+    const questions = [
+      // MÓDULO 0 – INTRODUCCIÓN
+      {
+        module: "Introducción",
+        type: "quiz",
+        question: "¿Qué son los derechos humanos?",
+        options: [
+          "Reglas que solo aplican en algunos países.",
+          "Derechos que todas las personas tenemos por el hecho de ser humanas.",
+          "Permisos que da el gobierno si te portas bien.",
+          "Beneficios que solo reciben algunos grupos."
+        ],
+        correct: 1,
+        explanation: "Los derechos humanos pertenecen a todas las personas, sin importar su país, edad, origen o creencias."
+      },
+      {
+        module: "Introducción",
+        type: "open",
+        question: "En tus palabras, ¿por qué crees que es importante que los derechos humanos sean iguales para todas las personas?",
+        reflectionHint: "No hay respuesta correcta o incorrecta. Lo importante es tu reflexión honesta. 💬"
+      },
+
+      // MÓDULO 1 – Dignidad, vida e igualdad
+      {
+        module: "Dignidad, vida e igualdad",
+        type: "quiz",
+        question: "En tu colegio, un estudiante es insultado por su acento extranjero. ¿Qué derecho se está vulnerando principalmente?",
+        options: [
+          "Derecho al trabajo.",
+          "Derecho a la igualdad y no discriminación.",
+          "Derecho al voto.",
+          "Derecho a la propiedad."
+        ],
+        correct: 1,
+        explanation: "Cuando se humilla o excluye a alguien por su origen, se vulnera la igualdad y el principio de no discriminación."
+      },
+      {
+        module: "Dignidad, vida e igualdad",
+        type: "quiz",
+        question: "¿Cuál de estas frases respeta mejor la dignidad humana?",
+        options: [
+          "Todos debemos ser tratados con respeto, aunque pensemos distinto.",
+          "Solo algunos merecen respeto si se lo ganan.",
+          "Quien se equivoca merece ser humillado.",
+          "Hay personas que valen más que otras."
+        ],
+        correct: 0,
+        explanation: "La dignidad implica respetar a todas las personas, incluso cuando no estamos de acuerdo con ellas."
+      },
+      {
+        module: "Dignidad, vida e igualdad",
+        type: "open",
+        question: "Si ves que se burlan de alguien por su aspecto o forma de hablar, ¿qué podrías hacer tú para defender su dignidad sin ponerte en peligro?",
+        reflectionHint: "Piensa en acciones concretas: apoyar, no reírte, avisar a un adulto, hablar con respeto, etc."
+      },
+
+      // MÓDULO 2 – Libertad de expresión y participación
+      {
+        module: "Libertad de expresión y participación",
+        type: "quiz",
+        question: "¿Cuál de estos ejemplos es un ejercicio sano de libertad de expresión?",
+        options: [
+          "Insultar a otros en redes porque 'yo digo lo que pienso'.",
+          "Expresar tu opinión con respeto, aunque sea diferente.",
+          "Obligar a otros a pensar como tú.",
+          "Difundir mentiras sobre alguien por diversión."
+        ],
+        correct: 1,
+        explanation: "La libertad de expresión implica opinar, pero respetando la dignidad y los derechos de los demás."
+      },
+      {
+        module: "Libertad de expresión y participación",
+        type: "quiz",
+        question: "La participación ciudadana significa:",
+        options: [
+          "Solo votar cada cierto tiempo.",
+          "Tomar parte en decisiones que afectan tu comunidad (reuniones, debates, propuestas).",
+          "Dejar que otros decidan por ti.",
+          "Quejarte en redes sin hacer nada más."
+        ],
+        correct: 1,
+        explanation: "Participar es involucrarse activamente en las decisiones de tu entorno."
+      },
+      {
+        module: "Libertad de expresión y participación",
+        type: "open",
+        question: "En tu escuela o barrio se toma una decisión que te afecta y nadie te pregunta. ¿Qué podrías hacer para participar de forma respetuosa y hacer escuchar tu voz?",
+        reflectionHint: "Piensa en dialogar, proponer, escribir, participar en reuniones o hablar con representantes."
+      },
+
+      // MÓDULO 3 – Educación, salud y vida digna
+      {
+        module: "Educación, salud y vida digna",
+        type: "quiz",
+        question: "A un niño se le niega la entrada a la escuela solo por ser pobre. ¿Qué derecho se vulnera principalmente?",
+        options: [
+          "Derecho a la recreación.",
+          "Derecho a la educación.",
+          "Derecho a la libertad de expresión.",
+          "Derecho al voto."
+        ],
+        correct: 1,
+        explanation: "La educación debe ser accesible a todos sin discriminación."
+      },
+      {
+        module: "Educación, salud y vida digna",
+        type: "quiz",
+        question: "¿Cuál de estas situaciones respeta mejor el derecho a la salud?",
+        options: [
+          "Atender solo a pacientes con dinero.",
+          "Negarse a atender a alguien por su aspecto.",
+          "Garantizar atención básica a todas las personas, sin discriminación.",
+          "Vender medicamentos falsos."
+        ],
+        correct: 2,
+        explanation: "La salud es un derecho que debe protegerse para todas las personas."
+      },
+      {
+        module: "Educación, salud y vida digna",
+        type: "open",
+        question: "En tu barrio muchas personas no tienen acceso fácil a servicios de salud. ¿Qué acciones podrían tomar los vecinos para defender ese derecho?",
+        reflectionHint: "Ejemplo: organizarse, pedir apoyo a autoridades, hacer peticiones formales, difundir la situación, etc."
+      },
+
+      // MÓDULO 4 – No discriminación y respeto a la diversidad
+      {
+        module: "No discriminación y diversidad",
+        type: "quiz",
+        question: "¿Qué es la discriminación?",
+        options: [
+          "Tratar a todas las personas igual.",
+          "Tratar a alguien peor por alguna característica personal (origen, idioma, identidad, etc.).",
+          "Estar de acuerdo con alguien.",
+          "No querer tener amigos."
+        ],
+        correct: 1,
+        explanation: "Discriminar es dar un trato injusto o desigual a una persona por quién es."
+      },
+      {
+        module: "No discriminación y diversidad",
+        type: "quiz",
+        question: "En un trabajo deciden no contratar a una persona solo porque tiene discapacidad, aunque está capacitada. Esto es:",
+        options: [
+          "Una decisión normal.",
+          "Un ejemplo de discriminación.",
+          "Algo que no tiene que ver con derechos humanos.",
+          "Solo una preferencia personal."
+        ],
+        correct: 1,
+        explanation: "Negar oportunidades por discapacidad es discriminación y vulnera derechos."
+      },
+      {
+        module: "No discriminación y diversidad",
+        type: "open",
+        question: "Un compañero nuevo es ignorado por ser de otro país o hablar distinto. ¿Qué podrías hacer tú para que se sienta incluido?",
+        reflectionHint: "Piensa en invitar, escuchar, presentarlo al grupo, evitar burlas, etc."
+      }
+    ];
+
+    let currentIndex = 0;
+    let score = 0;
+    let hasAnswered = false;
+
+    const moduleBadge = document.getElementById("moduleBadge");
+    const moduleLabel = document.getElementById("moduleLabel");
+    const typeLabel = document.getElementById("typeLabel");
+    const progressText = document.getElementById("progressText");
+    const progressBar = document.getElementById("progressBar");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const openAnswer = document.getElementById("openAnswer");
+    const reflectionHint = document.getElementById("reflectionHint");
+    const feedback = document.getElementById("feedback");
+    const scoreText = document.getElementById("scoreText");
+    const nextBtn = document.getElementById("nextBtn");
+    const gameDiv = document.getElementById("game");
+
+    function renderQuestion() {
+      const q = questions[currentIndex];
+
+      moduleBadge.textContent = q.module;
+      moduleLabel.textContent = "Módulo: " + q.module;
+      typeLabel.textContent = q.type === "quiz"
+        ? "Tipo de pregunta: opción múltiple"
+        : "Tipo de pregunta: respuesta abierta / reflexión";
+
+      const total = questions.length;
+      const currentNumber = currentIndex + 1;
+      progressText.textContent = `Pregunta ${currentNumber} de ${total}`;
+      const percent = (currentNumber / total) * 100;
+      progressBar.style.width = percent + "%";
+
+      questionText.textContent = q.question;
+      optionsContainer.innerHTML = "";
+      feedback.textContent = "";
+      feedback.className = "feedback";
+      reflectionHint.textContent = "";
+      openAnswer.style.display = "none";
+      openAnswer.value = "";
+      hasAnswered = false;
+      nextBtn.textContent = "Responder";
+
+      if (q.type === "quiz") {
+        // Crear opciones tipo test
+        q.options.forEach((opt, idx) => {
+          const label = document.createElement("label");
+          label.className = "option-item";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = "option";
+          input.value = idx;
+
+          label.appendChild(input);
+          label.appendChild(document.createTextNode(opt));
+          optionsContainer.appendChild(label);
+        });
+      } else {
+        // Pregunta abierta
+        openAnswer.style.display = "block";
+        if (q.reflectionHint) {
+          reflectionHint.textContent = q.reflectionHint;
+        }
+      }
+    }
+
+    function endGame() {
+      gameDiv.innerHTML = "";
+      const endDiv = document.createElement("div");
+      endDiv.className = "end-screen";
+
+      const totalQuiz = questions.filter(q => q.type === "quiz").length;
+
+      const title = document.createElement("div");
+      title.className = "end-title";
+      title.textContent = "🎉 ¡Has completado el juego!";
+
+      const scoreInfo = document.createElement("div");
+      scoreInfo.className = "end-score";
+      scoreInfo.textContent = `Puntaje en preguntas de opción múltiple: ${score} de ${totalQuiz}`;
+
+      const msg = document.createElement("p");
+      msg.textContent = "Recuerda: ser guardián de los derechos humanos no es solo conocerlos, sino vivirlos y defenderlos cada día. 💙";
+
+      const btnRestart = document.createElement("button");
+      btnRestart.className = "btn btn-primary";
+      btnRestart.textContent = "Jugar de nuevo";
+      btnRestart.onclick = () => {
+        // Reiniciar
+        currentIndex = 0;
+        score = 0;
+        scoreText.textContent = "Puntaje: 0";
+        gameDiv.innerHTML = "";
+        // Reconstruir estructura básica del juego
+        gameDiv.appendChild(moduleBadge);
+        gameDiv.appendChild(moduleLabel);
+        gameDiv.appendChild(typeLabel);
+        gameDiv.appendChild(document.querySelector(".progress"));
+        gameDiv.appendChild(questionText);
+        gameDiv.appendChild(optionsContainer);
+        gameDiv.appendChild(openAnswer);
+        gameDiv.appendChild(reflectionHint);
+        gameDiv.appendChild(feedback);
+        gameDiv.appendChild(document.querySelector(".controls"));
+        renderQuestion();
+      };
+
+      endDiv.appendChild(title);
+      endDiv.appendChild(scoreInfo);
+      endDiv.appendChild(msg);
+      endDiv.appendChild(btnRestart);
+      gameDiv.appendChild(endDiv);
+    }
+
+    nextBtn.onclick = () => {
+      const q = questions[currentIndex];
+
+      if (!hasAnswered) {
+        // Primera pulsación: corregir o registrar reflexión
+        if (q.type === "quiz") {
+          const selected = document.querySelector('input[name="option"]:checked');
+          if (!selected) {
+            feedback.textContent = "Por favor, selecciona una opción antes de continuar.";
+            feedback.className = "feedback incorrect";
+            return;
+          }
+          const value = parseInt(selected.value, 10);
+          if (value === q.correct) {
+            score++;
+            feedback.textContent = "✅ ¡Correcto! " + (q.explanation || "");
+            feedback.className = "feedback correct";
+          } else {
+            feedback.textContent = "❌ No es correcto. " + (q.explanation || "");
+            feedback.className = "feedback incorrect";
+          }
+          scoreText.textContent = `Puntaje: ${score}`;
+        } else {
+          // Pregunta abierta
+          const text = openAnswer.value.trim();
+          if (!text) {
+            feedback.textContent = "Escribe tu respuesta o reflexión antes de continuar. 📝";
+            feedback.className = "feedback incorrect";
+            return;
+          }
+          feedback.textContent = "💡 Gracias por tu respuesta. No hay correcto o incorrecto, lo importante es reflexionar.";
+          feedback.className = "feedback correct";
+        }
+
+        hasAnswered = true;
+        nextBtn.textContent = currentIndex === questions.length - 1 ? "Finalizar" : "Siguiente";
+      } else {
+        // Segunda pulsación: pasar a la siguiente pregunta
+        currentIndex++;
+        if (currentIndex >= questions.length) {
+          endGame();
+        } else {
+          renderQuestion();
+        }
+      }
+    };
+
+    // Iniciar juego
+    renderQuestion();
+  </script>
+</body>
+</html>
